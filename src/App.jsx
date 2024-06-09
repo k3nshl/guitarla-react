@@ -6,7 +6,22 @@ import { db } from "./data/db"
 function App() {
 
   const [data, setData] = useState(db)
-  const [cart, serCart] = useState([])
+  const [cart, setCart] = useState([])
+
+  function addToCart(item) {
+
+    const itemExists = cart.findIndex(guitar => guitar.id === item.id)
+
+    if (itemExists >= 0) {
+      const updatedCart = [...cart]
+      updatedCart[itemExists].quantity++
+      setCart(updatedCart)
+    } else {
+      item.quantity = 1
+      setCart([...cart, item])
+    }
+
+  }
 
   return (
     <>
@@ -19,10 +34,11 @@ function App() {
 
         <div className="row mt-5">
           {data.map((guitar) => (
-            <Guitar 
+            <Guitar
               key={guitar.id}
               guitar={guitar}
-              serCart={serCart}
+              setCart={setCart}
+              addToCart={addToCart}
             />
           ))}
 
